@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { useGame } from "@/contexts/game-context"
-import { RotateCcw } from "lucide-react"
+import TurboBotDashboard from "@/components/turbo-bot-dashboard"
+import { RotateCcw, Bot } from "lucide-react"
 
 interface Bet {
   type: "number" | "color" | "even-odd" | "high-low"
@@ -22,6 +23,7 @@ export default function RouletteGame() {
   const [betAmount, setBetAmount] = useState(10)
   const [rotation, setRotation] = useState(0)
   const wheelRef = useRef<HTMLDivElement>(null)
+  const [showTurboBot, setShowTurboBot] = useState(false)
 
   const rouletteNumbers = [
     0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29,
@@ -105,6 +107,31 @@ export default function RouletteGame() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-red-900 to-slate-900 p-4">
+      {showTurboBot && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 p-4 overflow-y-auto">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex justify-end mb-4">
+              <Button
+                onClick={() => setShowTurboBot(false)}
+                variant="outline"
+                className="border-red-500/30 text-red-400 hover:bg-red-500/10 bg-transparent"
+              >
+                Fechar TurboBot
+              </Button>
+            </div>
+            <TurboBotDashboard gameType="roulette" userId="user-id" />
+          </div>
+        </div>
+      )}
+      <div className="fixed top-4 right-20 z-50">
+        <Button
+          onClick={() => setShowTurboBot(!showTurboBot)}
+          className="bg-purple-600 hover:bg-purple-700 border border-purple-500/30 text-white"
+        >
+          <Bot className="w-4 h-4 mr-2" />
+          TurboBot
+        </Button>
+      </div>
       <Card className="max-w-6xl mx-auto bg-black/40 border-red-500/20">
         <CardHeader>
           <CardTitle className="text-white flex items-center gap-2">

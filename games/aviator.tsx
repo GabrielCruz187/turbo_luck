@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { useGame } from "@/contexts/game-context"
-import { Plane } from "lucide-react"
+import { Plane, Bot } from "lucide-react"
+import TurboBotDashboard from "@/components/turbo-bot-dashboard"
 
 export default function AviatorGame() {
   const { balance, addToBalance, subtractFromBalance } = useGame()
@@ -18,6 +19,7 @@ export default function AviatorGame() {
   const [cashOutMultiplier, setCashOutMultiplier] = useState(0)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const crashPointRef = useRef(0)
+  const [showTurboBot, setShowTurboBot] = useState(false)
 
   const startRound = () => {
     if (betAmount > balance) return
@@ -76,6 +78,22 @@ export default function AviatorGame() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 p-4">
+      {showTurboBot && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 p-4 overflow-y-auto">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex justify-end mb-4">
+              <Button
+                onClick={() => setShowTurboBot(false)}
+                variant="outline"
+                className="border-purple-500/30 text-purple-400 hover:bg-purple-500/10 bg-transparent"
+              >
+                Fechar TurboBot
+              </Button>
+            </div>
+            <TurboBotDashboard gameType="aviator" userId="user-id" />
+          </div>
+        </div>
+      )}
       <Card className="max-w-4xl mx-auto bg-black/40 border-blue-500/20">
         <CardHeader>
           <CardTitle className="text-white flex items-center gap-2">
@@ -179,6 +197,15 @@ export default function AviatorGame() {
           </div>
         </CardContent>
       </Card>
+      <div className="fixed top-4 right-20 z-50">
+        <Button
+          onClick={() => setShowTurboBot(!showTurboBot)}
+          className="bg-purple-600 hover:bg-purple-700 border border-purple-500/30 text-white"
+        >
+          <Bot className="w-4 h-4 mr-2" />
+          TurboBot
+        </Button>
+      </div>
     </div>
   )
 }
